@@ -148,16 +148,18 @@ new Vue({
     if (id_token) {
 
       axios.get(conf.myservice + '/myAccount/cb?id_token=' + id_token).then(function (response) {
-        alert(JSON.stringify(response.data));
+        // alert(JSON.stringify(response.data));
         _this.sub = response.data.sub;
         _this.name = response.data.name;
         _this.scope = response.data.aud[0];
         //myaccount/apps/register?client_id=$CLIENT_ID
-        axios.get(conf.apps + 'myaccount/apps/register?client_id=' + "eb53e30a-1883-42bc-9777-78249fa3cfcc").then(function (response) {
-          alert(JSON.stringify(response.data));          
-        }
+        axios
+        .get(conf.apps + 'myaccount/apps/register?client_id=' + "eb53e30a-1883-42bc-9777-78249fa3cfcc")
+        .then(function (response) {
+          alert(JSON.stringify(response.data));
+        });
       }).catch(function (error) {
-        undefined.repos = error.response.statusText;
+        alert(JSON.stringify(error));
       });
     } else if (client_id) {
       window.location = conf.authorize + '/myAccount/authorize?client_id=' + client_id + '&redirect_uri=' + conf.redirect;
