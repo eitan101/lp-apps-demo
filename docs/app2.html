@@ -158,7 +158,8 @@ new Vue({
 
       axios.get(conf.myservice + '/myAccount/cb?id_token=' + id_token).then(function (response) {
         alert(JSON.stringify(response.data));
-        _this.username = response.data.sub;
+        _this.sub = response.data.sub;
+        _this.name = response.data.name;
       }).catch(function (error) {
         undefined.repos = error.response.statusText;
       });
