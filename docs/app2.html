@@ -131,16 +131,6 @@ new Vue({
     repos: []
   },
   methods: {
-    getRepos: function getRepos() {
-      var _this = this;
-
-      var repoUrl = 'https://api.github.com/users/' + this.username + '/repos';
-      axios.get(repoUrl).then(function (response) {
-        _this.repos = response.data;
-      }).catch(function (error) {
-        _this.repos = error.response.statusText;
-      });
-    }
   },
   beforeMount(){
     var _this = this;
@@ -160,6 +150,7 @@ new Vue({
         alert(JSON.stringify(response.data));
         _this.sub = response.data.sub;
         _this.name = response.data.name;
+        _this.scope = response.data.aud[0];
       }).catch(function (error) {
         undefined.repos = error.response.statusText;
       });
