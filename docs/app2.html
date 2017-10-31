@@ -148,15 +148,16 @@ new Vue({
     if (id_token) {
 
       axios.get(conf.myservice + '/myAccount/cb?id_token=' + id_token).then(function (response) {
-        // alert(JSON.stringify(response.data));
         _this.sub = response.data.sub;
         _this.name = response.data.name;
         _this.scope = response.data.aud[0];
-        //myaccount/apps/register?client_id=$CLIENT_ID
         axios
-        .get(conf.apps + '/myaccount/apps/register?client_id=' + "eb53e30a-1883-42bc-9777-78249fa3cfcc")
+        .get(conf.apps + '/myaccount/apps/register?client_id=' + response.data.aud[0])
         .then(function (response) {
-          alert(JSON.stringify(response.data));
+          _this.appName = response.data.client_name;
+          _this.appLogo = response.data.logo_uri;
+          _this.scope = response.data.scope;
+          // alert(JSON.stringify(response.data));
         });
       }).catch(function (error) {
         alert(JSON.stringify(error));
