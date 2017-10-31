@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html >
 
@@ -37,34 +34,72 @@ form {
   <div id="app">
   <section class="section">
     <h1 class="title is-1">
-      Welcome to App 1
+      Welcome to My App
     </h1>
-    <form @submit.prevent>
-      <label>
-        Enter GitHub Username:
-        <div class="field has-addons">
-          <div class="control is-expanded">
-            <input class="input" type="text" v-model="username" />
-          </div>
-          <div class="control">
-            <button
-              class="button is-info"
-              @click="getRepos">
-              Get Repos
-            </button>
-          </div>
+
+
+    <div class="box">
+      <article class="media">
+        <div class="media-left">
+          <figure class="image is-64x64">
+            <img :src="avatar">
+          </figure>
         </div>
-      </label>            
-    </form>
-    <nav class="panel">
-      <p class="panel-heading" v-show="username">
-        {{username}}'s Repos
-        <span style="float: right" v-show="repos.length > 0">({{ repos.length }})</span>
-      </p>
-      <a class="panel-block" :href="repo.html_url" v-for="repo in repos" target="_blank">
-        {{repo.name}}
-      </a>
-    </nav>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong>{{name}}</strong> <small>@{{sub}}</small> <small>31m</small>
+              <br>
+              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            </p>
+          </div>
+          <nav class="level is-mobile">
+            <div class="level-left">
+              <a class="level-item">
+                <span class="icon is-small"><i class="fa fa-reply"></i></span>
+              </a>
+              <a class="level-item">
+                <span class="icon is-small"><i class="fa fa-retweet"></i></span>
+              </a>
+              <a class="level-item">
+                <span class="icon is-small"><i class="fa fa-heart"></i></span>
+              </a>
+            </div>
+          </nav>
+        </div>
+      </article>
+    </div>
+    <div class="box">
+      <article class="media">
+        <div class="media-left">
+          <figure class="image is-64x64">
+            <img :src="appLogo">
+          </figure>
+        </div>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong>{{appName}}</strong> <small>@{{scope}}</small> <small>31m</small>
+              <br>
+              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            </p>
+          </div>
+          <nav class="level is-mobile">
+            <div class="level-left">
+              <a class="level-item">
+                <span class="icon is-small"><i class="fa fa-reply"></i></span>
+              </a>
+              <a class="level-item">
+                <span class="icon is-small"><i class="fa fa-retweet"></i></span>
+              </a>
+              <a class="level-item">
+                <span class="icon is-small"><i class="fa fa-heart"></i></span>
+              </a>
+            </div>
+          </nav>
+        </div>
+      </article>
+    </div>
   </section>
 </div>
   
@@ -74,55 +109,64 @@ form {
     <script >
     'use strict';
 
-new Vue({
-  el: '#app',
-  data: {
-    username: null,
-    repos: []
-  },
-  methods: {
-    getRepos: function getRepos() {
-      var _this = this;
-
-      var repoUrl = 'https://api.github.com/users/' + this.username + '/repos';
-      axios.get(repoUrl).then(function (response) {
-        _this.repos = response.data;
-      }).catch(function (error) {
-        _this.repos = error.response.statusText;
-      });
-    }
-  }
-});
-
-var conf = {
-  authorize: "https://localhost:9092",
-  myservice: "https://localhost:9093",
-  redirect: window.location.protocol + '//' + window.location.host + window.location.pathname
-  // redirect : "https://s.codepen.io/eitan101/debug/ZaGWYo/XxkVwDQqWogM"
-};
-
 function getHashValue(key) {
   var matches = location.hash.match(new RegExp(key + '=([^&]*)'));
   return matches ? matches[1] : null;
 }
 
-// usage
-var id_token = getHashValue('id_token');
-var client_id = getHashValue('client_id');
-// alert(`hash is ${location.hash}`);
-if (id_token) {
+new Vue({
+  el: '#app',
+  data: {
+    username: "eitan",
+    avatar: "https://bulma.io/images/placeholders/128x128.png",
+    name: "John Smith",
+    sub: "johnsmith",
+    scope: "user:ro",
+    appName: "my app",
+    appLogo: "https://bulma.io/images/placeholders/128x128.png",
+    repos: []
+  },
+  methods: {
+  },
+  beforeMount(){
+    var _this = this;
+    var conf = {
+      authorize: "https://localhost:9092",
+      myservice: "https://localhost:9093",
+      apps: "https://localhost:9091",
+      redirect: window.location.protocol + '//' + window.location.host + window.location.pathname
+    };
 
-  axios.get(conf.myservice + '/myAccount/cb?id_token=' + id_token).then(function (response) {
-    alert(JSON.stringify(response.data));
-  }).catch(function (error) {
-    undefined.repos = error.response.statusText;
-  });
-} else if (client_id) {
-  // alert(`client_id=${client_id}`)
-  window.location = conf.authorize + '/myAccount/authorize?client_id=' + client_id + '&redirect_uri=' + conf.redirect;
-} else {
-  console.log("nothing");
-}
+    // usage
+    var id_token = getHashValue('id_token');
+    var client_id = getHashValue('client_id');
+    // alert(`hash is ${location.hash}`);
+    if (id_token) {
+
+      axios.get(conf.myservice + '/myAccount/cb?id_token=' + id_token).then(function (response) {
+        _this.sub = response.data.sub;
+        _this.name = response.data.name;
+        _this.scope = response.data.aud[0];
+        axios
+        .get(conf.apps + '/myaccount/apps/register?client_id=' + response.data.aud[0])
+        .then(function (response) {
+          _this.appName = response.data.client_name;
+          _this.appLogo = response.data.logo_uri;
+          _this.scope = response.data.scope;
+          // alert(JSON.stringify(response.data));
+        });
+      }).catch(function (error) {
+        alert(JSON.stringify(error));
+      });
+    } else if (client_id) {
+      window.location = conf.authorize + '/myAccount/authorize?client_id=' + client_id + '&redirect_uri=' + conf.redirect;
+    } else {
+      console.log("nothing");
+    }
+
+  },
+});
+
   </script>
 
   
