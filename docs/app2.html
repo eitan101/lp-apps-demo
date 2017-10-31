@@ -1,0 +1,133 @@
+
+
+
+<!DOCTYPE html>
+<html >
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="shortcut icon" type="image/x-icon" href="https://production-assets.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" />
+  <link rel="mask-icon" type="" href="https://production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" />
+  <title>CodePen - App1</title>
+  
+  
+  
+  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.2/css/bulma.min.css'>
+<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+
+      <style>
+      body {
+  padding: 20px 0;
+}
+
+form {
+  margin-bottom: 15px;
+}
+
+    </style>
+
+  
+  
+  
+  
+</head>
+
+<body translate="no" >
+
+  <div id="app">
+  <section class="section">
+    <h1 class="title is-1">
+      Welcome to App 1
+    </h1>
+    <form @submit.prevent>
+      <label>
+        Enter GitHub Username:
+        <div class="field has-addons">
+          <div class="control is-expanded">
+            <input class="input" type="text" v-model="username" />
+          </div>
+          <div class="control">
+            <button
+              class="button is-info"
+              @click="getRepos">
+              Get Repos
+            </button>
+          </div>
+        </div>
+      </label>            
+    </form>
+    <nav class="panel">
+      <p class="panel-heading" v-show="username">
+        {{username}}'s Repos
+        <span style="float: right" v-show="repos.length > 0">({{ repos.length }})</span>
+      </p>
+      <a class="panel-block" :href="repo.html_url" v-for="repo in repos" target="_blank">
+        {{repo.name}}
+      </a>
+    </nav>
+  </section>
+</div>
+  
+  <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
+<script src='https://unpkg.com/vue/dist/vue.js'></script>
+
+    <script >
+    'use strict';
+
+new Vue({
+  el: '#app',
+  data: {
+    username: null,
+    repos: []
+  },
+  methods: {
+    getRepos: function getRepos() {
+      var _this = this;
+
+      var repoUrl = 'https://api.github.com/users/' + this.username + '/repos';
+      axios.get(repoUrl).then(function (response) {
+        _this.repos = response.data;
+      }).catch(function (error) {
+        _this.repos = error.response.statusText;
+      });
+    }
+  }
+});
+
+var conf = {
+  authorize: "http://localhost:9092",
+  myservice: "http://localhost:9093",
+  redirect: window.location.protocol + '//' + window.location.host + window.location.pathname
+  // redirect : "https://s.codepen.io/eitan101/debug/ZaGWYo/XxkVwDQqWogM"
+};
+
+function getHashValue(key) {
+  var matches = location.hash.match(new RegExp(key + '=([^&]*)'));
+  return matches ? matches[1] : null;
+}
+
+// usage
+var id_token = getHashValue('id_token');
+var client_id = getHashValue('client_id');
+// alert(`hash is ${location.hash}`);
+if (id_token) {
+
+  axios.get(conf.myservice + '/myAccount/cb?id_token=' + id_token).then(function (response) {
+    alert(JSON.stringify(response.data));
+  }).catch(function (error) {
+    undefined.repos = error.response.statusText;
+  });
+} else if (client_id) {
+  // alert(`client_id=${client_id}`)
+  window.location = conf.authorize + '/myAccount/authorize?client_id=' + client_id + '&redirect_uri=' + conf.redirect;
+} else {
+  console.log("nothing");
+}
+  </script>
+
+  
+  
+
+</body>
+</html>
+ 
