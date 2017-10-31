@@ -154,7 +154,7 @@ new Vue({
         _this.scope = response.data.aud[0];
         //myaccount/apps/register?client_id=$CLIENT_ID
         axios
-        .get(conf.apps + 'myaccount/apps/register?client_id=' + "eb53e30a-1883-42bc-9777-78249fa3cfcc")
+        .get(conf.apps + '/myaccount/apps/register?client_id=' + "eb53e30a-1883-42bc-9777-78249fa3cfcc")
         .then(function (response) {
           alert(JSON.stringify(response.data));
         });
