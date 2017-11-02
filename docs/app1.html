@@ -119,7 +119,7 @@ new Vue({
   el: '#app',
   data: {
     username: "eitan",
-    avatar: "https://bulma.io/images/placeholders/128x128.png",
+    avatar: null,
     name: "John Smith",
     sub: null ,
     scope: "user:ro",
@@ -147,6 +147,7 @@ new Vue({
       axios.get(conf.myservice + '/myAccount/cb?id_token=' + id_token).then(function (response) {
         _this.sub = response.data.sub;
         _this.name = response.data.name;
+        _this.avatar = response.data.picture || "https://bulma.io/images/placeholders/128x128.png";
         _this.scope = response.data.aud[0];
         axios
         .get(conf.apps + '/myaccount/apps/register?client_id=' + response.data.aud[0])
